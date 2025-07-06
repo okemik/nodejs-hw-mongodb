@@ -1,23 +1,25 @@
-import express from 'express';
-import cors from 'cors';
-import pino from 'pino-http';
-import contactsRouter from './routes/contacts.js';
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const contactsRouter = require("./routers/contacts");
+const notFoundHandler = require("./middlewares/notFoundHandler");
+const errorHandler = require("./middlewares/errorHandler");
 
-export const setupServer = () => {
-  const app = express();
+dotenv.config();
 
-  app.use(cors());
-  app.use(pino());
-  app.use(express.json());
+const app = express();
+app.use(express.json());
 
-  app.use('/contacts', contactsRouter);
+app.use("/contacts", contactsRouter);
+app.use(notFoundHandler);
+app.use(errorHandler);
 
-  app.use((req, res) => {
-    res.status(404).json({ message: 'Not found' });
-  });
-
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
-};
+mongoose
+  .connect(process.env.DB_URI)
+  .then(() => {
+    console.log("Connected to MongoDB");
+    app.listen(process.env.PORT || 3000, () => {
+      console.log("Server running");
+    });
+  })
+  .catch((err) => console.error(err));
