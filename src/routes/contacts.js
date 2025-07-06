@@ -4,6 +4,7 @@ const ctrlWrapper = require("../utils/ctrlWrapper");
 
 const router = express.Router();
 
+router.get("/", ctrlWrapper(ctrl.getAllContacts)); // <-- EKLE!
 router.post("/", ctrlWrapper(ctrl.createContact));
 router.get("/:contactId", ctrlWrapper(ctrl.getContactById));
 router.patch("/:contactId", ctrlWrapper(ctrl.updateContact));
