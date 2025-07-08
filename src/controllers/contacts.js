@@ -2,11 +2,12 @@ const contactsService = require("../services/contacts");
 const createError = require("http-errors");
 
 const getAllContacts = async (req, res) => {
-  const contacts = await contactsService.getAll();
+  const result = await contactsService.getAll(req.query);
+
   res.status(200).json({
     status: 200,
-    message: "Success",
-    data: contacts,
+    message: "Successfully found contacts!",
+    data: result,
   });
 };
 
