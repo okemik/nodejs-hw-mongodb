@@ -8,10 +8,9 @@ const isValidId = require("../middlewares/isValidId");
 const router = express.Router();
 
 router.get("/", ctrlWrapper(ctrl.getAllContacts));
-router.post("/", validateBody(addSchema), ctrlWrapper(ctrl.addContact));
+router.post("/", validateBody(addSchema), ctrlWrapper(ctrl.createContact));
 router.get("/:contactId", ctrlWrapper(ctrl.getContactById));
 router.patch("/:contactId", isValidId, validateBody(updateSchema), ctrlWrapper(ctrl.updateContact));
 router.delete("/:contactId", ctrlWrapper(ctrl.deleteContact));
 
 module.exports = router;
- 
