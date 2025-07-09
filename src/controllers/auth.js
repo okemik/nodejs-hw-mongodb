@@ -1,9 +1,12 @@
+const express = require('express');
+const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const createError = require('http-errors');
 const User = require('../models/User');
 const Session = require('../models/Session');
 const sendEmail = require('../utils/sendEmail');
+const authController = require('../controllers/auth');
 
 exports.sendResetEmail = async (req, res, next) => {
   try {
@@ -38,3 +41,12 @@ exports.resetPassword = async (req, res, next) => {
     next(createError(401, 'Token is expired or invalid.'));
   }
 };
+
+router.post('/register', authController.register);
+router.post('/login', authController.login);
+router.post('/send-reset-email', authController.sendResetEmail);
+router.post('/reset-pwd', authController.resetPassword);
+router.post('/refresh', authController.refreshSession);
+router.post('/logout', authController.logout);
+
+module.exports = router;
