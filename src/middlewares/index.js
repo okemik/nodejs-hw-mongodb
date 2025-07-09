@@ -1,6 +1,6 @@
 module.exports = {
     validateBody: require("./validateBody"),
-    authMiddleware: require("./authMiddleware"),
+    //authMiddleware: require("./authMiddleware"),
     errorHandler: require("./errorHandler"),
     notFoundHandler: require("./notFoundHandler"),
   };
