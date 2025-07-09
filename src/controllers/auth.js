@@ -68,7 +68,36 @@ const resetPassword = async (req, res, next) => {
   });
 };
 
+const register = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: "Email already in use" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      email,
+      password: hashedPassword,
+    });
+
+    await newUser.save();
+
+    res.status(201).json({
+      status: 201,
+      message: "User registered successfully",
+      data: { email: newUser.email },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   sendResetEmail,
   resetPassword,
+  register,
 };
