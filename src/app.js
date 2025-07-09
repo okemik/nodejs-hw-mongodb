@@ -1,17 +1,24 @@
-const express = require("express");
-const authRouter = require("./routes/api/auth");
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const createError = require('http-errors');
+const authRouter = require('./routers/auth');
+const contactRouter = require('./routers/contacts');
 
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-app.use("/auth", authRouter);
+app.use('/auth', authRouter);
+app.use('/contacts', contactRouter);
 
-// diğer routerlar...
-
+app.use((req, res, next) => next(createError(404, 'Not found')));
 app.use((err, req, res, next) => {
-  const { status = 500, message = "Server error" } = err;
-  res.status(status).json({ status, message });
+  res.status(err.status || 500).json({
+    status: 'error',
+    message: err.message,
+  });
 });
 
 module.exports = app;

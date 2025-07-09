@@ -1,40 +1,33 @@
-const Contact = require("../models/Contact");
+const Contact = require('../models/Contact');
+const createError = require('http-errors');
 
-const createContact = async (req, res, next) => {
-  const { name, email, phone } = req.body;
-  const photo = req.file?.path || null;
-
-  const newContact = await Contact.create({ name, email, phone, photo });
-
-  res.status(201).json({
-    status: 201,
-    message: "Contact created",
-    data: newContact,
-  });
-};
-
-const updateContact = async (req, res, next) => {
-  const { id } = req.params;
-  const { name, email, phone } = req.body;
-  const photo = req.file?.path;
-
-  const update = { name, email, phone };
-  if (photo) update.photo = photo;
-
-  const contact = await Contact.findByIdAndUpdate(id, update, { new: true });
-
-  if (!contact) {
-    return res.status(404).json({ status: 404, message: "Contact not found" });
+exports.createContact = async (req, res, next) => {
+  try {
+    const contact = await Contact.create({
+      ...req.body,
+      userId: req.user._id,
+      photo: req.file?.path || '',
+    });
+    res.status(201).json({ status: 'success', data: contact });
+  } catch (err) {
+    next(err);
   }
-
-  res.status(200).json({
-    status: 200,
-    message: "Contact updated",
-    data: contact,
-  });
 };
 
-module.exports = {
-  createContact,
-  updateContact,
+exports.updateContact = async (req, res, next) => {
+  try {
+    const update = { ...req.body };
+    if (req.file?.path) update.photo = req.file.path;
+
+    const contact = await Contact.findOneAndUpdate(
+      { _id: req.params.contactId, userId: req.user._id },
+      update,
+      { new: true }
+    );
+
+    if (!contact) throw createError(404, 'Contact not found!');
+    res.status(200).json({ status: 'success', data: contact });
+  } catch (err) {
+    next(err);
+  }
 };

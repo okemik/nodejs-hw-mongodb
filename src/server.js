@@ -1,30 +1,11 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const cookieParser = require("cookie-parser");
+require('dotenv').config();
+const mongoose = require('mongoose');
+const app = require('./src/app');
 
-const contactsRouter = require("./routes/api/contacts");
-const authRouter = require("./routes/api/auth");
-const notFoundHandler = require("./middlewares/notFoundHandler");
-const errorHandler = require("./middlewares/errorHandler");
-
-dotenv.config();
-const app = express();
-
-app.use(express.json());
-app.use(cookieParser());
-
-app.use("/contacts", contactsRouter);
-app.use("/auth", authRouter);
-app.use(notFoundHandler);
-app.use(errorHandler);
-
-mongoose
-  .connect(process.env.DB_URI)
+const PORT = process.env.PORT || 3000;
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
-    console.log("Connected to MongoDB");
-    app.listen(process.env.PORT || 3000, () => {
-      console.log("Server running");
-    });
+    console.log('MongoDB connected');
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
-  .catch((err) => console.error(err));
+  .catch(err => console.error('DB error:', err));
