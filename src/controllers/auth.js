@@ -1,58 +1,74 @@
-const authService = require("../services/auth");
-const createError = require("http-errors");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const createHttpError = require("http-errors");
 
-const register = async (req, res) => {
-  const user = await authService.registerUser(req.body);
-  res.status(201).json({
-    status: 201,
-    message: "Successfully registered a user!",
-    data: user,
-  });
-};
+const User = require("../models/User");
+const sendEmail = require("../helpers/sendEmail");
 
-const login = async (req, res) => {
-  const { accessToken, refreshToken } = await authService.loginUser(req.body);
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    sameSite: "Strict",
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-  });
-  res.status(200).json({
-    status: 200,
-    message: "Successfully logged in an user!",
-    data: { accessToken },
-  });
-};
+const sendResetEmail = async (req, res, next) => {
+  const { email } = req.body;
 
-const refresh = async (req, res) => {
-  const oldToken = req.cookies.refreshToken;
-  if (!oldToken) throw createError(401, "No refresh token provided");
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw createHttpError(404, "User not found!");
+  }
 
-  const { accessToken, refreshToken } = await authService.refreshSession(oldToken);
+  const payload = { email };
+  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "5m" });
 
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    sameSite: "Strict",
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-  });
+  const resetLink = `${process.env.APP_DOMAIN}/reset-password?token=${token}`;
+
+  const message = {
+    to: email,
+    subject: "Reset your password",
+    html: `
+      <p>Click the link below to reset your password:</p>
+      <a href="${resetLink}">${resetLink}</a>
+    `,
+  };
+
+  try {
+    await sendEmail(message);
+  } catch (error) {
+    throw createHttpError(500, "Failed to send the email, please try again later.");
+  }
 
   res.status(200).json({
     status: 200,
-    message: "Successfully refreshed a session!",
-    data: { accessToken },
+    message: "Reset password email has been successfully sent.",
+    data: {},
   });
 };
 
-const logout = async (req, res) => {
-  const token = req.cookies.refreshToken;
-  if (token) await authService.logoutUser(token);
-  res.clearCookie("refreshToken");
-  res.status(204).send();
+const resetPassword = async (req, res, next) => {
+  const { token, password } = req.body;
+
+  let email;
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    email = payload.email;
+  } catch (error) {
+    throw createHttpError(401, "Token is expired or invalid.");
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw createHttpError(404, "User not found!");
+  }
+
+  const hashPassword = await bcrypt.hash(password, 10);
+  user.password = hashPassword;
+  user.token = null; // mevcut oturumu bitirme isteği varsa
+  await user.save();
+
+  res.status(200).json({
+    status: 200,
+    message: "Password has been successfully reset.",
+    data: {},
+  });
 };
 
 module.exports = {
-  register,
-  login,
-  refresh,
-  logout,
+  sendResetEmail,
+  resetPassword,
 };

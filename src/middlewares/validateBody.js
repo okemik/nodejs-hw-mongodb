@@ -1,4 +1,3 @@
-// src/middlewares/validateBody.js
 const createHttpError = require("http-errors");
 
 const validateBody = (schema) => {
@@ -11,4 +10,4 @@ const validateBody = (schema) => {
   };
 };
 
-module.exports = validateBody;
+module.exports = { validateBody };
