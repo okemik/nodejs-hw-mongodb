@@ -14,8 +14,13 @@ const registerSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const refreshTokenSchema = Joi.object({
+  refreshToken: Joi.string().required(),
+});
+
 module.exports = {
   emailSchema,
   resetPwdSchema,
   registerSchema,
+  refreshTokenSchema,
 };

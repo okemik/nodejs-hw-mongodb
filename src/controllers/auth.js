@@ -96,8 +96,37 @@ const register = async (req, res, next) => {
   }
 };
 
+const refreshToken = async (req, res, next) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: "Refresh token missing" });
+  }
+
+  try {
+    const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+    const user = await User.findById(payload.id);
+    if (!user || user.token !== refreshToken) {
+      return res.status(404).json({ message: "Not Found" });
+    }
+    // Yeni access token oluştur
+    const newAccessToken = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    res.json({ accessToken: newAccessToken });
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid refresh token" });
+  }
+};
+
+
 module.exports = {
   sendResetEmail,
   resetPassword,
   register,
+  refreshToken,
 };
