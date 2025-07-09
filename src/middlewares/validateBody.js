@@ -1,13 +1,13 @@
-const createHttpError = require("http-errors");
+// src/middlewares/validateBody.js
 
 const validateBody = (schema) => {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
-      return next(createHttpError(400, error.message));
+      return res.status(400).json({ message: error.message });
     }
     next();
   };
 };
 
-module.exports = { validateBody };
+module.exports = validateBody;
