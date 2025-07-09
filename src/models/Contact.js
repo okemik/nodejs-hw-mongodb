@@ -1,19 +1,15 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose");
 
-const contactSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const contactSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String },
+    phone: { type: String },
+    photo: { type: String },
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  phone: String,
-  photo: String, // Cloudinary’den gelen fotoğraf URL’si
-});
+  { versionKey: false, timestamps: true }
+);
 
-const Contact = mongoose.model("Contact", contactSchema);
+const Contact = model("contact", contactSchema);
 
 module.exports = Contact;
