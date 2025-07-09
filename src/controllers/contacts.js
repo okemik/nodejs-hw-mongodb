@@ -2,7 +2,7 @@ const contactsService = require("../services/contacts");
 const createError = require("http-errors");
 
 const getAllContacts = async (req, res) => {
-  const result = await contactsService.getAll(req.query);
+  const result = await contactsService.getAll(req.user._id, req.query);
 
   res.status(200).json({
     status: 200,
@@ -12,7 +12,11 @@ const getAllContacts = async (req, res) => {
 };
 
 const createContact = async (req, res) => {
-  const contact = await contactsService.createContact(req.body);
+  const contact = await contactsService.createContact({
+    ...req.body,
+    userId: req.user._id,
+  });
+
   res.status(201).json({
     status: 201,
     message: "Successfully created a contact!",
@@ -21,10 +25,11 @@ const createContact = async (req, res) => {
 };
 
 const getContactById = async (req, res) => {
-  const contact = await contactsService.getContactById(req.params.contactId);
+  const contact = await contactsService.getContactById(req.user._id, req.params.contactId);
   if (!contact) {
     throw createError(404, "Contact not found");
   }
+
   res.status(200).json({
     status: 200,
     data: contact,
@@ -32,10 +37,15 @@ const getContactById = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
-  const contact = await contactsService.updateContact(req.params.contactId, req.body);
+  const contact = await contactsService.updateContact(
+    req.user._id,
+    req.params.contactId,
+    req.body
+  );
   if (!contact) {
     throw createError(404, "Contact not found");
   }
+
   res.status(200).json({
     status: 200,
     message: "Successfully patched a contact!",
@@ -44,10 +54,11 @@ const updateContact = async (req, res) => {
 };
 
 const deleteContact = async (req, res) => {
-  const result = await contactsService.deleteContact(req.params.contactId);
+  const result = await contactsService.deleteContact(req.user._id, req.params.contactId);
   if (!result) {
     throw createError(404, "Contact not found");
   }
+
   res.status(204).send();
 };
 
