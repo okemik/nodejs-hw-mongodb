@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 
-const contactsRouter = require("./routes/contacts");
-const authRouter = require("./routes/auth");
+const contactsRouter = require("./routes/api/contacts");
+const authRouter = require("./routes/api/auth");
 const notFoundHandler = require("./middlewares/notFoundHandler");
 const errorHandler = require("./middlewares/errorHandler");
 
