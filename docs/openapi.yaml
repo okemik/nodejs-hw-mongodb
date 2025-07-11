@@ -19,55 +19,43 @@ servers:
 paths:
   /contacts:
     get:
-      $ref: "#/swagger/paths/contacts/get.yaml"
+      $ref: "../swagger/paths/contacts/get.yaml"
     post:
-      $ref: "#/swagger/paths/contacts/post.yaml"
+      $ref: "../swagger/paths/contacts/post.yaml"
   /contacts/{id}:
     get:
-      $ref: "#/swagger/paths/contacts/{id}/get.yaml"
+      $ref: "../swagger/paths/contacts/{id}/get.yaml"
     patch:
-      $ref: "#/swagger/paths/contacts/{id}/patch.yaml"
+      $ref: "../swagger/paths/contacts/{id}/patch.yaml"
     delete:
-      $ref: "#/swagger/paths/contacts/{id}/delete.yaml"
+      $ref: "../swagger/paths/contacts/{id}/delete.yaml"
 
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
+
   schemas:
     Contact:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-          example: "123e4567-e89b-12d3-a456-426614174000"
-        name:
-          type: string
-          example: "John Doe"
-        email:
-          type: string
-          format: email
-          example: "john@example.com"
-        phone:
-          type: string
-          example: "+1234567890"
-      required:
-        - id
-        - name
-        - email
+        id: { type: string, format: uuid, example: "uuid" }
+        name: { type: string, example: "John Doe" }
+        email: { type: string, format: email, example: "john@example.com" }
+        phone: { type: string, example: "+1234567890" }
+      required: [id, name, email]
+
   responses:
     NotFound:
-      description: The specified resource was not found.
+      description: Resource not found
       content:
         application/json:
           schema:
             type: object
             properties:
-              message:
-                type: string
-                example: "Contact not found"
+              message: { type: string, example: "Contact not found" }
+
     Unauthorized:
       description: Unauthorized access
       content:
@@ -75,14 +63,11 @@ components:
           schema:
             type: object
             properties:
-              message:
-                type: string
-                example: "Unauthorized"
+              message: { type: string, example: "Unauthorized" }
+
   parameters:
-    ContactId:
+    id:
       name: id
       in: path
       required: true
-      schema:
-        type: string
-        format: uuid
+      schema: { type: string, format: uuid }

@@ -28,11 +28,13 @@ parameters:
       type: string
 responses:
   "200":
-    description: Contact found
+    description: List of contacts
     content:
       application/json:
         schema:
-          $ref: "#/components/schemas/Contact"
+          type: array
+          items:
+            $ref: "#/components/schemas/Contact"
   "404":
     $ref: "#/components/responses/NotFound"
   "401":
