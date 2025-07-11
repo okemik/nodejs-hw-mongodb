@@ -7,13 +7,16 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   description: >
     Contacts API documentation for hw7-swagger task.
+
 tags:
   - name: Contacts
     description: Operations related to contacts
+
 servers:
   - url: http://localhost:3000
   - url: https://your-render-app-url.onrender.com
-ppaths:
+
+paths:
   /contacts:
     $ref: "../swagger/paths/contacts/get.yaml"
   /contacts/{contactId}:
@@ -23,13 +26,15 @@ ppaths:
       $ref: "../swagger/paths/contacts/{id}/patch.yaml"
     delete:
       $ref: "../swagger/paths/contacts/{id}/delete.yaml"
-  postContacts:
+  /contacts/post:
     $ref: "../swagger/paths/contacts/post.yaml"
+
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
+
   schemas:
     Contact:
       type: object
@@ -52,5 +57,6 @@ components:
         - id
         - name
         - email
+
 security:
   - bearerAuth: []
