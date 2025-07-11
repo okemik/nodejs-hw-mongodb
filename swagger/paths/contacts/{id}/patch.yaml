@@ -6,7 +6,7 @@ description: Updates contact information partially.
 security:
   - bearerAuth: []
 parameters:
-  - $ref: "../../../components/parameters.yaml#/ContactId"
+  - $ref: "../../../components/parameters/id"
 requestBody:
   description: Fields to update for the contact
   required: true
@@ -30,6 +30,6 @@ responses:
         schema:
           $ref: "#/components/schemas/Contact"
   "404":
-    $ref: "#/components/responses.yaml#/NotFound"
+    $ref: "#/components/responses/NotFound"
   "401":
-    $ref: "#/components/responses.yaml#/Unauthorized"
+    $ref: "#/components/responses/Unauthorized"

@@ -35,7 +35,6 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-
   schemas:
     Contact:
       type: object
@@ -87,6 +86,3 @@ components:
       schema:
         type: string
         format: uuid
-
-security:
-  - bearerAuth: []
