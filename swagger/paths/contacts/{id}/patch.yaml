@@ -24,12 +24,12 @@ requestBody:
             type: string
 responses:
   "200":
-  description: Contact found
-  content:
-    application/json:
-      schema:
-        $ref: "../../../../docs/openapi.yaml#/components/schemas/Contact"
+    description: Contact found
+    content:
+      application/json:
+        schema:
+          $ref: "../../../../docs/openapi.yaml#/components/schemas/Contact"
   "404":
-    $ref: "../../../components/responses.yaml#/NotFound"
+    description: Contact not found
   "401":
-    $ref: "../../../components/responses.yaml#/Unauthorized"
+    description: Unauthorized
