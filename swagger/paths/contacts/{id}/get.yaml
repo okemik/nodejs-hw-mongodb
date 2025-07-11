@@ -6,15 +6,21 @@ description: Gets contact details by contact ID.
 security:
   - bearerAuth: []
 parameters:
-  - $ref: "../../../components/parameters.yaml#/ContactId"
+  - name: contactId
+    in: path
+    required: true
+    schema:
+      type: string
+      format: uuid
+    description: The ID of the contact
 responses:
   "200":
-  description: Contact found
-  content:
-    application/json:
-      schema:
-        $ref: "../../../../docs/openapi.yaml#/components/schemas/Contact"
+    description: Contact found
+    content:
+      application/json:
+        schema:
+          $ref: "../../../../docs/openapi.yaml#/components/schemas/Contact"
   "404":
-    $ref: "../../../components/responses.yaml#/NotFound"
+    description: Contact not found
   "401":
-    $ref: "../../../components/responses.yaml#/Unauthorized"
+    description: Unauthorized
