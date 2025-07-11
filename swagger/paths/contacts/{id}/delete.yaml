@@ -6,15 +6,14 @@ description: Deletes the contact specified by id.
 security:
   - bearerAuth: []
 parameters:
-  - $ref: "#/components/parameters/id"
+  - $ref: "../../../openapi.yaml#/components/parameters/id"
 responses:
   "200":
-    description: Contact found
     content:
       application/json:
         schema:
-          $ref: "#/components/schemas/Contact"
+          $ref: "../../../openapi.yaml#/components/schemas/Contact"
   "404":
-    $ref: "#/components/responses/NotFound"
+    $ref: "../../../openapi.yaml#/components/responses/NotFound"
   "401":
-    $ref: "#/components/responses/Unauthorized"
+    $ref: "../../../openapi.yaml#/components/responses/Unauthorized"

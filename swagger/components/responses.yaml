@@ -1,5 +1,5 @@
 NotFound:
-  description: The specified resource was not found.
+  description: Resource not found
   content:
     application/json:
       schema:

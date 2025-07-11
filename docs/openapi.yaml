@@ -19,18 +19,18 @@ servers:
 paths:
   /contacts:
     get:
-      $ref: "../swagger/paths/contacts/get.yaml"
+      $ref: "./swagger/paths/contacts/get.yaml"
     post:
-      $ref: "../swagger/paths/contacts/post.yaml"
+      $ref: "./swagger/paths/contacts/post.yaml"
   /contacts/{id}:
     get:
-      $ref: "../swagger/paths/contacts/{id}/get.yaml"
+      $ref: "./swagger/paths/contacts/{id}/get.yaml"
     patch:
-      $ref: "../swagger/paths/contacts/{id}/patch.yaml"
+      $ref: "./swagger/paths/contacts/{id}/patch.yaml"
     delete:
-      $ref: "../swagger/paths/contacts/{id}/delete.yaml"
+      $ref: "./swagger/paths/contacts/{id}/delete.yaml"
 
-components:
+ccomponents:
   securitySchemes:
     bearerAuth:
       type: http
@@ -40,34 +40,31 @@ components:
     Contact:
       type: object
       properties:
-        id: { type: string, format: uuid, example: "uuid" }
-        name: { type: string, example: "John Doe" }
-        email: { type: string, format: email, example: "john@example.com" }
-        phone: { type: string, example: "+1234567890" }
-      required: [id, name, email]
-
-  responses:
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message: { type: string, example: "Contact not found" }
-
-    Unauthorized:
-      description: Unauthorized access
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message: { type: string, example: "Unauthorized" }
+        id:
+          type: string
+          format: uuid
+          example: "uuid"
+        name:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          example: "john@example.com"
+        phone:
+          type: string
+          example: "+1234567890"
+      required:
+        - id
+        - name
+        - email
 
   parameters:
     id:
-      name: id
-      in: path
-      required: true
-      schema: { type: string, format: uuid }
+      $ref: "./swagger/components/parameters.yaml#/id"
+
+  responses:
+    NotFound:
+      $ref: "./swagger/components/responses.yaml#/NotFound"
+    Unauthorized:
+      $ref: "./swagger/components/responses.yaml#/Unauthorized"
