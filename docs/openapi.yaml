@@ -1,0 +1,56 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Contacts API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description: >
+    Contacts API documentation for hw7-swagger task.
+tags:
+  - name: Contacts
+    description: Operations related to contacts
+servers:
+  - url: http://localhost:3000
+  - url: https://your-render-app-url.onrender.com
+paths:
+  /contacts:
+    $ref: "./swagger/paths/contacts/get.yaml"
+  /contacts/{contactId}:
+    get:
+      $ref: "./swagger/paths/contacts/{id}/get.yaml"
+    patch:
+      $ref: "./swagger/paths/contacts/{id}/patch.yaml"
+    delete:
+      $ref: "./swagger/paths/contacts/{id}/delete.yaml"
+  postContacts:
+    $ref: "./swagger/paths/contacts/post.yaml"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    Contact:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        name:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          example: "john@example.com"
+        phone:
+          type: string
+          example: "+1234567890"
+      required:
+        - id
+        - name
+        - email
+security:
+  - bearerAuth: []

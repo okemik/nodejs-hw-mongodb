@@ -1,0 +1,7 @@
+ContactId:
+  name: contactId
+  in: path
+  description: The ID of the contact
+  required: true
+  schema:
+    type: string

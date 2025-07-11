@@ -1,0 +1,20 @@
+tags:
+  - Contacts
+summary: Retrieve a single contact by ID
+operationId: getContactById
+description: Gets contact details by contact ID.
+security:
+  - bearerAuth: []
+parameters:
+  - $ref: "../../../components/parameters.yaml#/ContactId"
+responses:
+  "200":
+    description: Contact found
+    content:
+      application/json:
+        schema:
+          $ref: "#/components/schemas/Contact"
+  "404":
+    $ref: "../../../components/responses.yaml#/NotFound"
+  "401":
+    $ref: "../../../components/responses.yaml#/Unauthorized"
