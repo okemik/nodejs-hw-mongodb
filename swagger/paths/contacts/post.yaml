@@ -32,6 +32,6 @@ responses:
     content:
       application/json:
         schema:
-          $ref: "#/components/schemas/Contact"
+          $ref: "../../../../docs/openapi.yaml#/components/schemas/Contact"
   "401":
-    $ref: "../../components/responses.yaml#/Unauthorized"
+    description: Unauthorized
