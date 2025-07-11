@@ -6,7 +6,7 @@ description: Updates contact information partially.
 security:
   - bearerAuth: []
 parameters:
-  - $ref: "../../../components/parameters/id"
+  - $ref: "#/components/parameters/id"
 requestBody:
   description: Fields to update for the contact
   required: true
