@@ -1,7 +1,8 @@
-ContactId:
-  name: contactId
+id:
+  name: id
   in: path
-  description: The ID of the contact
   required: true
   schema:
     type: string
+    format: uuid
+  description: The unique identifier

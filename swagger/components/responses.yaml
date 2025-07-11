@@ -8,6 +8,7 @@ NotFound:
           message:
             type: string
             example: "Contact not found"
+
 Unauthorized:
   description: Unauthorized access
   content:
