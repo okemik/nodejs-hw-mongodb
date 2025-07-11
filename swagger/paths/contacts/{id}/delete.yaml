@@ -6,7 +6,7 @@ description: Deletes the contact specified by id.
 security:
   - bearerAuth: []
 parameters:
-  - $ref: "../../../components/parameters/id"
+  - $ref: "#/components/parameters/id"
 responses:
   "200":
     description: Contact found
