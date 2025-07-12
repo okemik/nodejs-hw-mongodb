@@ -1,9 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
-let contacts = [
-  { id: '1', name: 'Ömer Ferkan', email: 'omer@example.com', phone: '+905551112233' },
-];
+const Contact = require('../models/contact'); // mongoose Contact modeli
 
 /**
  * @swagger
@@ -27,9 +24,20 @@ let contacts = [
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Contact'
+ *       500:
+ *         description: Sunucu hatası
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/', (req, res) => {
-  res.json(contacts);
+router.get('/', async (req, res) => {
+  try {
+    const contacts = await Contact.find();
+    res.json(contacts);
+  } catch (err) {
+    res.status(500).json({ status: 'error', code: 500, message: 'Sunucu hatası' });
+  }
 });
 
 /**
@@ -58,13 +66,23 @@ router.get('/', (req, res) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Sunucu hatası
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/:id', (req, res) => {
-  const contact = contacts.find((c) => c.id === req.params.id);
-  if (!contact) {
-    return res.status(404).json({ status: 'error', code: 404, message: 'Kontak bulunamadı' });
+router.get('/:id', async (req, res) => {
+  try {
+    const contact = await Contact.findById(req.params.id);
+    if (!contact) {
+      return res.status(404).json({ status: 'error', code: 404, message: 'Kontak bulunamadı' });
+    }
+    res.json(contact);
+  } catch (err) {
+    res.status(500).json({ status: 'error', code: 500, message: 'Sunucu hatası' });
   }
-  res.json(contact);
 });
 
 /**
@@ -87,20 +105,30 @@ router.get('/:id', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Contact'
  *       400:
- *         description: Geçersiz veri
+ *         description: Eksik veya hatalı veri
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Sunucu hatası
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { name, email, phone } = req.body;
-  if (!name || !email || !phone) {
-    return res.status(400).json({ status: 'error', code: 400, message: 'Eksik alanlar var' });
+  if (!name || !email) {
+    return res.status(400).json({ status: 'error', code: 400, message: 'Name ve email alanları zorunludur' });
   }
-  const newContact = { id: (contacts.length + 1).toString(), name, email, phone };
-  contacts.push(newContact);
-  res.status(201).json(newContact);
+
+  try {
+    const newContact = await Contact.create({ name, email, phone });
+    res.status(201).json(newContact);
+  } catch (err) {
+    res.status(500).json({ status: 'error', code: 500, message: 'Sunucu hatası' });
+  }
 });
 
 module.exports = router;

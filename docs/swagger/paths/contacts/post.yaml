@@ -15,14 +15,11 @@ requestBody:
         properties:
           name:
             type: string
-            example: "Jane Smith"
           email:
             type: string
             format: email
-            example: "jane@example.com"
           phone:
             type: string
-            example: "+19876543210"
         required:
           - name
           - email

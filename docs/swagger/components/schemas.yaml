@@ -6,14 +6,11 @@ Contact:
       example: "64a12ef3b62a1b0001234567"
     name:
       type: string
-      example: "John Doe"
     email:
       type: string
       format: email
-      example: "john@example.com"
     phone:
       type: string
-      example: "+1-555-123-4567"
     favorite:
       type: boolean
       example: false

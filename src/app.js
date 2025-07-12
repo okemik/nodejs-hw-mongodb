@@ -14,43 +14,74 @@ const options = {
       version: '1.0.0',
       description: 'hw7-swagger ödevi için API',
     },
-    servers: [{ url: 'http://localhost:3000' }],
+    servers: [
+      {
+        url: 'http://localhost:3000',
+        description: 'Yerel geliştirme sunucusu',
+      },
+    ],
     components: {
       schemas: {
         Contact: {
           type: 'object',
           properties: {
-            id: { type: 'string', example: '1' },
-            name: { type: 'string', example: 'Ömer' },
-            email: { type: 'string', example: 'omer@example.com' },
-            phone: { type: 'string', example: '+905551112233' },
+            id: {
+              type: 'string',
+              example: '1',
+            },
+            name: {
+              type: 'string',
+              example: 'Ömer',
+            },
+            email: {
+              type: 'string',
+              example: 'omer@example.com',
+            },
+            phone: {
+              type: 'string',
+              example: '+905551112233',
+            },
           },
           required: ['name', 'email', 'phone'],
         },
         ErrorResponse: {
           type: 'object',
           properties: {
-            status: { type: 'string', example: 'error' },
-            code: { type: 'integer', example: 400 },
-            message: { type: 'string', example: 'Geçersiz istek' },
+            status: {
+              type: 'string',
+              example: 'error',
+            },
+            code: {
+              type: 'integer',
+              example: 400,
+            },
+            message: {
+              type: 'string',
+              example: 'Geçersiz istek',
+            },
           },
         },
       },
     },
   },
-  apis: ['./src/routes/*.js'], // Route dosyalarındaki yorumlar okunacak
+  apis: ['./src/routes/*.js'], // Yönlendirmeler buradan okunacak
 };
 
 const specs = swaggerJsdoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
-// Basit veri - memory storage
+// In-memory veri
 let contacts = [
-  { id: '1', name: 'Ömer', email: 'omer@example.com', phone: '+905551112233' },
+  {
+    id: '1',
+    name: 'Ömer',
+    email: 'omer@example.com',
+    phone: '+905551112233',
+  },
 ];
 
-// Routes
-const router = require('express').Router();
+// Router
+const router = express.Router();
 
 /**
  * @swagger
@@ -90,7 +121,17 @@ router.get('/', (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Contact'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Ali Veli
+ *               email:
+ *                 type: string
+ *                 example: ali@example.com
+ *               phone:
+ *                 type: string
+ *                 example: "+905321234567"
  *     responses:
  *       201:
  *         description: Kontak oluşturuldu
@@ -107,16 +148,27 @@ router.get('/', (req, res) => {
  */
 router.post('/', (req, res) => {
   const { name, email, phone } = req.body;
-  if (!name || !email || !phone)
-    return res.status(400).json({ status: 'error', code: 400, message: 'Eksik alanlar' });
+  if (!name || !email || !phone) {
+    return res.status(400).json({
+      status: 'error',
+      code: 400,
+      message: 'Eksik alanlar',
+    });
+  }
 
-  const newContact = { id: (contacts.length + 1).toString(), name, email, phone };
+  const newContact = {
+    id: (contacts.length + 1).toString(),
+    name,
+    email,
+    phone,
+  };
   contacts.push(newContact);
   res.status(201).json(newContact);
 });
 
 app.use('/api/contacts', router);
 
+// Ana rota
 app.get('/', (req, res) => {
   res.send('hw7-swagger API çalışıyor!');
 });
