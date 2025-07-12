@@ -32,6 +32,6 @@ responses:
     content:
       application/json:
         schema:
-          $ref: "../../../components/schemas.yaml#/Contact"
+          $ref: "../../components/schemas.yaml#/Contact"
   "401":
-    $ref: "../../../components/responses.yaml#/Unauthorized"
+    $ref: "../../components/responses.yaml#/Unauthorized"
