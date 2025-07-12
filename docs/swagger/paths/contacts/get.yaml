@@ -31,8 +31,8 @@ responses:
         schema:
           type: array
           items:
-            $ref: "#/components/schemas/Contact"
+            $ref: "../../../components/schemas.yaml#/Contact"
   "404":
-    $ref: "#/components/responses/NotFound"
+    $ref: "../../../components/responses.yaml#/NotFound"
   "401":
-    $ref: "#/components/responses/Unauthorized"
+    $ref: "../../../components/responses.yaml#/Unauthorized"
