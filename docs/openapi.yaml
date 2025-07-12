@@ -5,7 +5,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: https://your-api-domain.com/api
+  - url: https://hw7-swagger-2kye.onrender.com/api
 
 components:
   securitySchemes:
