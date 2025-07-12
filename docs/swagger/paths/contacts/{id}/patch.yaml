@@ -6,7 +6,7 @@ description: Updates contact information partially.
 security:
   - bearerAuth: []
 parameters:
-  - $ref: "../../../openapi.yaml#/components/parameters/id"
+  - $ref: "#/components/parameters/id"
 requestBody:
   description: Fields to update for the contact
   required: true
@@ -22,13 +22,17 @@ requestBody:
             format: email
           phone:
             type: string
+        example:
+          name: Jane Doe
+          email: jane@example.com
+          phone: "+46712345678"
 responses:
   "200":
     content:
       application/json:
         schema:
-          $ref: "../../../openapi.yaml#/components/schemas/Contact"
+          $ref: "#/components/schemas/Contact"
   "404":
-    $ref: "../../../openapi.yaml#/components/responses/NotFound"
+    $ref: "#/components/responses/NotFound"
   "401":
-    $ref: "../../../openapi.yaml#/components/responses/Unauthorized"
+    $ref: "#/components/responses/Unauthorized"
