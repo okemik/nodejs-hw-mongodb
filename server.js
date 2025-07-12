@@ -46,7 +46,7 @@ function authenticate(req, res, next) {
 
 // GET /contacts
 app.get("/contacts", authenticate, async (req, res) => {
-  const { page = 1, limit = 10, search } = req.query;
+  const { page = 1, limit = 100, search } = req.query;
   const skip = (page - 1) * limit;
   const filter = search
     ? {
